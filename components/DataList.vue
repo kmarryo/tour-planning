@@ -1,13 +1,13 @@
 <template>
-  <div class="grid gap-3">
-    <div class="mx-3 md:mx-0 p-3 bg-gray-200 rounded-lg">
-      <div class="grid grid-flow-col items-center justify-around w-10/12">
-        <div v-for="attribute in attributes" class="font-bold">
-          {{ attribute }}
-        </div>
+  <div class="mx-3 md:mx-0 first:bg-gray-200 grid gap-5 md:gap-3">
+    <div
+      class="md:grid grid-flow-col grid-cols-6 bg-gray-200 rounded-lg p-3 gap-5"
+    >
+      <div v-for="attribute in attributes" class="font-bold">
+        {{ attribute }}
       </div>
     </div>
-    <slot />
+    <slot name="data-sets" />
   </div>
 </template>
 

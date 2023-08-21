@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 
 export const useMainStore = defineStore('main', {
   state: () => ({
+    // Drivers
     driver: {
       name: '',
       location: '',
@@ -9,7 +10,9 @@ export const useMainStore = defineStore('main', {
     driverIndex: 0,
     drivers: [] as Driver[],
     hasToastNotification: false,
+    // Tours
     tours: [] as Tour[],
+    tourIndex: 0,
   }),
   actions: {
     async fetchDrivers() {

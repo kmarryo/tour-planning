@@ -6,15 +6,13 @@
       @cta-clicked=""
     />
     <DataList :attributes="tourAttributes">
-      <template #default>
-        <div>
-          <Tour
-            v-for="(tour, index) in tours"
-            :tour="tour"
-            :key="tour.customerName"
-            :record="tour"
-          />
-        </div>
+      <template #data-sets>
+        <Tour
+          v-for="(tour, index) in tours"
+          :key="tour.customerName"
+          :tour="tour"
+          :index="index"
+        />
       </template>
     </DataList>
   </section>
@@ -29,6 +27,7 @@ const tourAttributes = [
   'Location From',
   'Location To',
   'Assigned Driver',
+  '',
 ];
 
 // Store and Tour interactions
