@@ -2,6 +2,7 @@
   <div class="mx-3 md:mx-0 first:bg-gray-200 grid gap-5 md:gap-3">
     <div
       class="md:grid grid-flow-col grid-cols-6 bg-gray-200 rounded-lg p-3 gap-5"
+      :class="{ 'grid-cols-6': isTour, 'grid-cols-3': !isTour }"
     >
       <div v-for="attribute in attributes" class="font-bold">
         {{ attribute }}
@@ -16,6 +17,10 @@ defineProps({
   attributes: {
     type: Array as PropType<string[]>,
     required: true,
+  },
+  isTour: {
+    type: Boolean,
+    default: false,
   },
 });
 </script>

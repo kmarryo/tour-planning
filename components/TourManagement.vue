@@ -5,7 +5,7 @@
       cta-text="Create new tour"
       @cta-clicked=""
     />
-    <DataList :attributes="tourAttributes">
+    <DataList :attributes="tourAttributes" is-tour>
       <template #data-sets>
         <Tour
           v-for="(tour, index) in tours"

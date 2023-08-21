@@ -1,14 +1,14 @@
 <template>
   <div
-    class="grid grid-flow-col grid-cols-12 p-3 mx-3 md:mx-0 border border-gray-300 rounded-lg shadow-sm items-center"
+    class="grid grid-flow-col grid-cols-3 p-3 mx-3 md:mx-0 border border-gray-300 rounded-lg shadow-sm items-center gap-5"
   >
-    <div class="col-span-5 md:col-span-4">
+    <div>
       {{ driver.name }}
     </div>
-    <div class="col-span-5 md:col-span-4">
+    <div>
       {{ driver.location }}
     </div>
-    <div class="flex gap-2 md:gap-5 col-span-2 md:col-span-4 justify-end">
+    <div class="flex gap-2 md:gap-5 justify-end">
       <!-- Edit button -->
       <CtaButton outlined square @click="editDriver()">
         <template #prepend-icon>

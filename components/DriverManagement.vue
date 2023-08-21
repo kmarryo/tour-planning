@@ -5,23 +5,18 @@
       cta-text="Add new driver"
       @cta-clicked="openAddDriver()"
     />
-    <div class="grid gap-3">
-      <div
-        class="grid grid-flow-col grid-cols-12 items-center mx-3 md:mx-0 p-3 bg-gray-200 rounded-lg justify-around"
-      >
-        <div class="col-span-4 font-bold">Name</div>
-        <div class="col-span-4 font-bold">Location</div>
-      </div>
-      <Driver
-        v-for="(driver, index) in drivers"
-        :driver="driver"
-        :key="driver.name"
-        :driver-index="index"
-        @delete-driver="openDeletePrompt(index)"
-        @edit-driver="openEditDriverModal"
-      />
-    </div>
-
+    <DataList :attributes="driverAttributes">
+      <template #data-sets>
+        <Driver
+          v-for="(driver, index) in drivers"
+          :driver="driver"
+          :key="driver.name"
+          :driver-index="index"
+          @delete-driver="openDeletePrompt(index)"
+          @edit-driver="openEditDriverModal"
+        />
+      </template>
+    </DataList>
     <Teleport to="body">
       <Modal v-if="isModalOpen" @close="handleAbort()">
         <template #default>
@@ -60,6 +55,8 @@ export enum ModalContent {
 import { useToggle } from '@vueuse/core';
 import { storeToRefs } from 'pinia';
 import { useMainStore } from '~/store/main';
+
+const driverAttributes = ['Name', 'Location', ''];
 
 // Dynamic components
 const DriverInfos = defineAsyncComponent(
