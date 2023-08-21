@@ -31,13 +31,10 @@
         placeholder="Hamburg"
         class="mb-5"
       />
-      <CustomInput
-        v-model="tour.assignedDriver"
-        label="Assigned Driver"
-        name="assigned-driver"
-        placeholder="Max Mustermann"
-        class="mb-5"
-      />
+      <div>
+        <p class="mb-2">Assigned Driver</p>
+        <Dropdown v-model="tour.assignedDriver" :items="driverNames" />
+      </div>
     </div>
     <div class="flex justify-end gap-5 items-center">
       <CtaButton text="Cancel" outlined @click="handleAbort()" />
@@ -71,7 +68,7 @@ const props = defineProps({
 
 const store = useMainStore();
 const { addTour, clearTour, updateTour, fetchTours } = store;
-const { tour: storeTour, tourIndex } = storeToRefs(store);
+const { tour: storeTour, tourIndex, drivers } = storeToRefs(store);
 
 const emit = defineEmits(['close', 'driversUpdate']);
 
@@ -96,4 +93,25 @@ const tour = reactive({
 const isEdit = computed(() => props.content === ModalContent.EditTour);
 
 const isValid = useAllFieldsFilled(tour);
+
+const driverNames = computed(() => {
+  const options = drivers.value
+    .filter((driver: Driver) => driver.location === tour.locationFrom)
+    .map((driver: Driver) => {
+      return {
+        label: driver.name,
+        value: driver,
+        selectable: true,
+      };
+    });
+  return options?.length
+    ? options
+    : [
+        {
+          label: 'Sorry, currently no driver on this location available',
+          value: undefined,
+          selectable: false,
+        },
+      ];
+});
 </script>
