@@ -11,13 +11,28 @@ export enum ModalContent {
 
 export const useModalComponent = (modalContent: Ref<ModalContent | null>) =>
   computed(() => {
-    // Dynamic components
-    const DriverInfos = defineAsyncComponent(
-      () => import('~/components/DriverInfos.vue')
-    );
     const DeletePrompt = defineAsyncComponent(
       () => import('~/components/DeletePrompt.vue')
     );
-    if (modalContent.value === ModalContent.DeleteDriver) return DeletePrompt;
-    return DriverInfos;
+    if (
+      modalContent.value === ModalContent.DeleteDriver ||
+      modalContent.value === ModalContent.DeleteTour
+    )
+      return DeletePrompt;
+    // Drivers
+    const DriverInfos = defineAsyncComponent(
+      () => import('~/components/DriverInfos.vue')
+    );
+    if (
+      modalContent.value === ModalContent.AddDriver ||
+      modalContent.value === ModalContent.EditDriver
+    )
+      return DriverInfos;
+
+    // Tours
+
+    const TourInfos = defineAsyncComponent(
+      () => import('~/components/TourInfos.vue')
+    );
+    return TourInfos;
   });

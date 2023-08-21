@@ -1,9 +1,13 @@
 <template>
   <div>
     <h2 class="text-2xl font-bold mb-5">Are you sure?</h2>
-    <p>
-      If you confirm to delete the driver you selected, the driver information
-      will be lost forever.
+    <p v-if="isDriver">
+      If you confirm this interaction, this driver's information will be lost
+      forever.
+    </p>
+    <p v-else-if="isTour">
+      If you confirm this interaction, this tour will be deleted and can't be
+      restored.
     </p>
     <div class="flex justify-end gap-5 mt-7">
       <CtaButton text="Cancel" outlined @click="handleAbort()" />
@@ -20,14 +24,26 @@
 <script lang="ts" setup>
 import { useMainStore } from '~/store/main';
 
-const emit = defineEmits(['close', 'driversUpdate']);
+const props = defineProps({
+  isDriver: {
+    type: Boolean,
+    default: false,
+  },
+  isTour: {
+    type: Boolean,
+    default: false,
+  },
+});
+
+const emit = defineEmits(['close', 'update']);
 const handleAbort = () => emit('close');
 const store = useMainStore();
-const { deleteDriver } = store;
+const { deleteDriver, deleteTour } = store;
 
 const handleDelete = () => {
-  deleteDriver();
-  emit('driversUpdate');
+  if (props.isDriver) deleteDriver();
+  if (props.isTour) deleteTour();
+  emit('update');
   emit('close');
 };
 </script>

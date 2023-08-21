@@ -10,7 +10,10 @@
         <component
           :is="ModalComponent"
           :content="modalContent"
+          :is-driver="isDriver"
+          :is-tour="isTour"
           @close="toggleModal()"
+          @update="refetch"
         />
       </template>
     </Modal>
@@ -27,12 +30,14 @@ import { useMainStore } from '~/store/main';
 import { useToggle } from '@vueuse/core';
 
 const store = useMainStore();
-const { clearDriver, clearTour } = store;
+const { clearDriver, clearTour, fetchDrivers, fetchTours } = store;
 const { modalContent, hasToastNotification, notificationText } =
   storeToRefs(store);
 
 const tabs = ['Driver Management', 'Tour Management'];
 const currentTabIndex = ref(0);
+const isDriver = computed(() => currentTabIndex.value === 0);
+const isTour = computed(() => currentTabIndex.value === 1);
 const TabComponent = useTabComponent(currentTabIndex);
 
 const [isModalOpen, toggleModal] = useToggle(false);
@@ -42,5 +47,10 @@ const handleAbort = () => {
   clearDriver();
   clearTour();
   toggleModal();
+};
+
+const refetch = () => {
+  if (isDriver.value) return fetchDrivers();
+  fetchTours();
 };
 </script>

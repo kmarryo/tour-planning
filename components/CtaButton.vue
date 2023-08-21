@@ -1,6 +1,7 @@
 <template>
   <button
     role="button"
+    :disabled="disabled"
     class="rounded-lg border shadow-sm transition-colors flex items-center gap-2"
     :class="{
       'text-gray-800 border-indigo-800 hover:bg-indigo-600 hover:text-white':
@@ -9,6 +10,7 @@
         !outlined && useDefaultColors,
       'px-5 py-3': !square,
       'p-2': square,
+      'bg-gray-400 hover:bg-gray-400 cursor-not-allowed': disabled,
     }"
   >
     <slot name="prepend-icon" /> {{ text }} <slot name="append-icon" />
@@ -32,6 +34,10 @@ defineProps({
   useDefaultColors: {
     type: Boolean,
     default: true,
+  },
+  disabled: {
+    type: Boolean,
+    default: false,
   },
 });
 </script>

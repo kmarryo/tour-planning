@@ -26,9 +26,15 @@
       <CtaButton
         v-if="isEdit"
         text="Update driver"
+        :disabled="!isValid"
         @click="handleDriverUpdate()"
       />
-      <CtaButton v-else text="Add new driver" @click="handleNewDriver()" />
+      <CtaButton
+        v-else
+        text="Add new driver"
+        :disabled="!isValid"
+        @click="handleNewDriver()"
+      />
     </div>
   </div>
 </template>
@@ -72,4 +78,5 @@ const driver = reactive({
   location: storeDriver.value.location,
 });
 const isEdit = computed(() => props.content === ModalContent.EditDriver);
+const isValid = useAllFieldsFilled(driver);
 </script>

@@ -28,12 +28,22 @@ export const useMainStore = defineStore('main', {
   }),
   getters: {
     notificationText: (state) => {
-      if (state.modalContent === ModalContent.AddDriver)
-        return 'Driver successfully added!';
-      if (state.modalContent === ModalContent.EditDriver)
-        return 'Driver successfully edited!';
-      if (state.modalContent === ModalContent.DeleteDriver)
-        return 'Driver successfully deleted!';
+      switch (state.modalContent) {
+        case ModalContent.AddDriver:
+          return 'Driver successfully added!';
+        case ModalContent.AddTour:
+          return 'Tour successfully added!';
+        case ModalContent.EditDriver:
+          return 'Driver successfully edited!';
+        case ModalContent.EditTour:
+          return 'Tour successfully edited!';
+        case ModalContent.DeleteDriver:
+          return 'Driver successfully deleted!';
+        case ModalContent.DeleteTour:
+          return 'Tour successfully deleted!';
+        default:
+          break;
+      }
     },
   },
   actions: {
@@ -105,6 +115,37 @@ export const useMainStore = defineStore('main', {
     },
     clearTour() {
       this.tour = { ...tourBlueprint };
+    },
+    async addTour(tour: Tour) {
+      await useFetch('/api/tour-management/add-tour', {
+        method: 'post',
+        body: tour, // stringified automatically when passing objects
+      });
+      this.clearTour();
+      this.showToastNotification();
+    },
+    async updateTour(
+      environment: 'store' | 'server',
+      index: number,
+      newTourInfos?: Tour
+    ) {
+      if (environment === 'store') return (this.tour = this.tours[index]);
+      await useFetch('/api/tour-management/update-tour', {
+        method: 'put',
+        body: {
+          index,
+          ...newTourInfos,
+        },
+      });
+      this.clearTour();
+      this.showToastNotification();
+    },
+    async deleteTour() {
+      await useFetch('/api/tour-management/delete-tour', {
+        method: 'delete',
+        body: { index: this.tourIndex },
+      });
+      this.showToastNotification();
     },
   },
 });
