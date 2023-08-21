@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply text-gray-800;
+  }
+}
+
+/* Transitions */
+.toast-enter-from,
+.toast-leave-to {
+  opacity: 0;
+  transform: scale(0.8) translateY(50px);
+}
+
+.toast-leave-from,
+.toast-enter-to {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+}
+
+.toast-leave-active,
+.toast-enter-active {
+  position: fixed;
+  transition: opacity, transform 500ms ease-out;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 0.5s;
+}
+
+.fade-leave-active {
+  opacity: 0.2;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.fade-leave-to {
+  max-height: 0;
+  padding: 0 inherit;
+  margin: 0 inherit;
+}
