@@ -2,24 +2,45 @@
   <div class="container mx-auto my-10">
     <TabSelection v-model="currentTabIndex" :tabs="tabs" />
     <transition name="fade">
-      <component :is="Component" class="my-10" />
+      <component :is="TabComponent" class="my-10" @toggle-modal="toggleModal" />
     </transition>
-    <!-- <DriverList /> -->
+
+    <Modal v-if="isModalOpen" @close="handleAbort()">
+      <template #content>
+        <component
+          :is="ModalComponent"
+          :content="modalContent"
+          @close="toggleModal()"
+        />
+      </template>
+    </Modal>
+    <ToastNotification
+      :show-notification="hasToastNotification"
+      :text="notificationText"
+    />
   </div>
 </template>
 
 <script lang="ts" setup>
-const DriverManagementComponent = defineAsyncComponent(
-  () => import('../components/DriverManagement.vue')
-);
-const TourManagementComponent = defineAsyncComponent(
-  () => import('../components/TourManagement.vue')
-);
+import { storeToRefs } from 'pinia';
+import { useMainStore } from '~/store/main';
+import { useToggle } from '@vueuse/core';
+
+const store = useMainStore();
+const { clearDriver, clearTour } = store;
+const { modalContent, hasToastNotification, notificationText } =
+  storeToRefs(store);
+
 const tabs = ['Driver Management', 'Tour Management'];
 const currentTabIndex = ref(0);
+const TabComponent = useTabComponent(currentTabIndex);
 
-const Component = computed(() => {
-  if (currentTabIndex.value === 0) return DriverManagementComponent;
-  return TourManagementComponent;
-});
+const [isModalOpen, toggleModal] = useToggle(false);
+const ModalComponent = useModalComponent(modalContent);
+
+const handleAbort = () => {
+  clearDriver();
+  clearTour();
+  toggleModal();
+};
 </script>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 class="text-xl font-bold mb-5">Are you sure?</h2>
+    <h2 class="text-2xl font-bold mb-5">Are you sure?</h2>
     <p>
       If you confirm to delete the driver you selected, the driver information
       will be lost forever.

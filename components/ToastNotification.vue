@@ -6,6 +6,9 @@
         class="bg-green-500 text-white p-5 rounded-lg fixed bottom-5 right-5 flex gap-5"
       >
         <slot name="text" />
+        <div v-if="text">
+          {{ text }}
+        </div>
         <button text="Schließen" role="button" @click="closeNotification()">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -34,6 +37,10 @@ defineProps({
   showNotification: {
     type: Boolean,
     default: false,
+  },
+  text: {
+    type: String,
+    default: '',
   },
 });
 

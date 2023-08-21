@@ -1,4 +1,13 @@
+import { ModalContent } from '~/composables/modal';
 import { defineStore } from 'pinia';
+
+const tourBlueprint = {
+  customerName: '',
+  shipmentDate: '',
+  locationFrom: '',
+  locationTo: '',
+  assignedDriver: '',
+};
 
 export const useMainStore = defineStore('main', {
   state: () => ({
@@ -12,8 +21,21 @@ export const useMainStore = defineStore('main', {
     hasToastNotification: false,
     // Tours
     tours: [] as Tour[],
+    tour: { ...tourBlueprint },
     tourIndex: 0,
+    // General
+    modalContent: '' as ModalContent,
   }),
+  getters: {
+    notificationText: (state) => {
+      if (state.modalContent === ModalContent.AddDriver)
+        return 'Driver successfully added!';
+      if (state.modalContent === ModalContent.EditDriver)
+        return 'Driver successfully edited!';
+      if (state.modalContent === ModalContent.DeleteDriver)
+        return 'Driver successfully deleted!';
+    },
+  },
   actions: {
     async fetchDrivers() {
       const { data: drivers } = await useFetch(
@@ -73,12 +95,16 @@ export const useMainStore = defineStore('main', {
     clearToastNotification() {
       this.hasToastNotification = false;
     },
+    // Tours
     async fetchTours() {
       const { data: tours } = await useFetch('/api/tour-management/tours');
       if (tours.value?.length) this.tours = tours.value;
       return {
         tours,
       };
+    },
+    clearTour() {
+      this.tour = { ...tourBlueprint };
     },
   },
 });

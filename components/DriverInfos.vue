@@ -34,9 +34,9 @@
 </template>
 
 <script lang="ts" setup>
+import { ModalContent } from '~/composables/modal';
 import { storeToRefs } from 'pinia';
 import { useMainStore } from '~/store/main';
-import { ModalContent } from './DriverManagement.vue';
 
 const props = defineProps({
   content: {
@@ -46,24 +46,24 @@ const props = defineProps({
 });
 
 const store = useMainStore();
-const { addDriver, clearDriver, updateDriver } = store;
+const { addDriver, clearDriver, updateDriver, fetchDrivers } = store;
 const { driver: storeDriver, driverIndex } = storeToRefs(store);
 
 const emit = defineEmits(['close', 'driversUpdate']);
 
-const handleNewDriver = () => {
-  addDriver(driver);
+const handleNewDriver = async () => {
+  await addDriver(driver);
+  await fetchDrivers();
   emit('close');
-  emit('driversUpdate');
 };
 const handleAbort = () => {
   clearDriver();
   emit('close');
 };
-const handleDriverUpdate = () => {
-  updateDriver('server', driverIndex.value, driver);
+const handleDriverUpdate = async () => {
+  await updateDriver('server', driverIndex.value, driver);
+  await fetchDrivers();
   emit('close');
-  emit('driversUpdate');
 };
 
 // Locally stored driver that gets updated on the server after confirmation
