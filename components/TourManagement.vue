@@ -5,11 +5,12 @@
       cta-text="Create new tour"
       @cta-clicked="openCreateNewTour()"
     />
-    <DataList :attributes="tourAttributes" is-tour>
+    <SearchBar class="my-10 mx-3 md:mx-0" />
+    <DataList v-if="filteredTours?.length" :attributes="tourAttributes" is-tour>
       <template #data-sets>
         <Tour
-          v-for="(tour, index) in tours"
-          :key="tour.customerName"
+          v-for="(tour, index) in filteredTours"
+          :key="`${tour.customerName}_${index}`"
           :tour="tour"
           :index="index"
           @delete-tour="openDeletePrompt(index)"
@@ -17,6 +18,10 @@
         />
       </template>
     </DataList>
+    <h2 class="text-xl" v-else>
+      Sorry, currently no tours with your selected filters available. Please
+      clear all filters and try with different parameters.
+    </h2>
   </section>
 </template>
 
@@ -40,8 +45,8 @@ const tourAttributes = [
 
 const store = useMainStore();
 const { fetchTours, updateTour } = store;
-const { modalContent, tourIndex } = storeToRefs(store);
-const { tours } = await fetchTours();
+await fetchTours();
+const { modalContent, tourIndex, filteredTours } = storeToRefs(store);
 
 const openCreateNewTour = () => {
   modalContent.value = ModalContent.AddTour;

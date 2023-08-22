@@ -5,6 +5,5 @@ export const useAllFieldsFilled = (object: { [key: string]: string }) =>
       const regex = /[a-zA-Z].*[a-zA-Z].*[a-zA-Z]|^\d{2}\.\d{2}\.\d{4}$/;
       return regex.test(value);
     });
-    console.log(allValues, validValues);
     return allValues.length === validValues.length;
   });

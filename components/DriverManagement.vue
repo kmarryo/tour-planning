@@ -5,18 +5,23 @@
       cta-text="Add new driver"
       @cta-clicked="openAddDriver()"
     />
-    <DataList :attributes="driverAttributes">
+    <SearchBar class="my-10 mx-3 md:mx-0" />
+    <DataList v-if="filteredDrivers?.length" :attributes="driverAttributes">
       <template #data-sets>
         <Driver
-          v-for="(driver, index) in drivers"
+          v-for="(driver, index) in filteredDrivers"
           :driver="driver"
-          :key="driver.name"
+          :key="`${driver.name}_${index}`"
           :driver-index="index"
           @delete-driver="openDeletePrompt(index)"
           @edit-driver="openEditDriverModal"
         />
       </template>
     </DataList>
+    <h2 class="text-xl" v-else>
+      Sorry, currently no drivers with your selected filters available. Please
+      clear all filters and try with different parameters.
+    </h2>
   </section>
 </template>
 
@@ -29,13 +34,16 @@ const emit = defineEmits(['toggle-modal']);
 
 const driverAttributes = ['Name', 'Location', ''];
 
-// Store and Driver interactions
-
 const store = useMainStore();
-const { driverIndex: storeDriverIndex, modalContent } = storeToRefs(store);
 const { fetchDrivers, updateDriver } = store;
+await fetchDrivers();
 
-const { drivers } = await fetchDrivers();
+const {
+  driverIndex: storeDriverIndex,
+  modalContent,
+  filteredDrivers,
+  filteredTours,
+} = storeToRefs(store);
 
 const openAddDriver = () => {
   modalContent.value = ModalContent.AddDriver;

@@ -1,5 +1,6 @@
 import { ModalContent } from '~/composables/modal';
 import { defineStore } from 'pinia';
+import { useFuse } from '~/composables/fuse';
 
 const tourBlueprint = {
   customerName: '',
@@ -8,6 +9,11 @@ const tourBlueprint = {
   locationTo: '',
   assignedDriver: '',
 };
+
+enum Tab {
+  DriverManagement = 'Driver Management',
+  TourManagement = 'Tour Management',
+}
 
 export const useMainStore = defineStore('main', {
   state: () => ({
@@ -20,11 +26,13 @@ export const useMainStore = defineStore('main', {
     drivers: [] as Driver[],
     hasToastNotification: false,
     // Tours
-    tours: [] as Tour[],
     tour: { ...tourBlueprint },
+    tours: [] as Tour[],
     tourIndex: 0,
     // General
     modalContent: '' as ModalContent,
+    searchTerm: '',
+    currentTab: Tab.DriverManagement as Tab,
   }),
   getters: {
     notificationText: (state) => {
@@ -44,6 +52,30 @@ export const useMainStore = defineStore('main', {
         default:
           break;
       }
+    },
+    filteredDrivers: (state) => {
+      if (!Tab.DriverManagement) return;
+      if (!state.searchTerm) return state.drivers;
+      const keys = ['name', 'location'];
+      const fuse = useFuse(state.drivers, keys);
+      return fuse.value
+        .search(state.searchTerm)
+        .map((result) => result.item) as Driver[];
+    },
+    filteredTours: (state) => {
+      if (!Tab.TourManagement) return;
+      if (!state.searchTerm) return state.tours;
+      const keys = [
+        'customerName',
+        'locationFrom',
+        'locationTo',
+        'shipmentDate',
+      ];
+      const fuse = useFuse(state.tours, keys);
+
+      return fuse.value
+        .search(state.searchTerm)
+        .map((result) => result.item) as Tour[];
     },
   },
   actions: {
@@ -65,7 +97,6 @@ export const useMainStore = defineStore('main', {
       this.showToastNotification();
     },
     async deleteDriver() {
-      console.log('deleteDriver');
       await useFetch('/api/driver-management/delete-driver', {
         method: 'delete',
         body: { index: this.driverIndex },
@@ -77,7 +108,6 @@ export const useMainStore = defineStore('main', {
       driverIndex: number,
       newDriverInfos?: Driver
     ) {
-      console.log(driverIndex);
       if (environment === 'store')
         return (this.driver = this.drivers[driverIndex]);
       await useFetch('/api/driver-management/update-driver', {
