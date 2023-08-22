@@ -10,9 +10,9 @@ const tourBlueprint = {
   assignedDriver: '',
 };
 
-enum Tab {
-  DriverManagement = 'Driver Management',
-  TourManagement = 'Tour Management',
+export enum Tab {
+  DriverManagement = 0,
+  TourManagement,
 }
 
 export const useMainStore = defineStore('main', {
@@ -54,7 +54,7 @@ export const useMainStore = defineStore('main', {
       }
     },
     filteredDrivers: (state) => {
-      if (!Tab.DriverManagement) return;
+      if (state.currentTab !== Tab.DriverManagement) return;
       if (!state.searchTerm) return state.drivers;
       const keys = ['name', 'location'];
       const fuse = useFuse(state.drivers, keys);
@@ -63,7 +63,7 @@ export const useMainStore = defineStore('main', {
         .map((result) => result.item) as Driver[];
     },
     filteredTours: (state) => {
-      if (!Tab.TourManagement) return;
+      if (state.currentTab !== Tab.TourManagement) return;
       if (!state.searchTerm) return state.tours;
       const keys = [
         'customerName',
@@ -176,6 +176,9 @@ export const useMainStore = defineStore('main', {
         body: { index: this.tourIndex },
       });
       this.showToastNotification();
+    },
+    clearSearchTerm() {
+      this.searchTerm = '';
     },
   },
 });

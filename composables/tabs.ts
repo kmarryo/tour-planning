@@ -1,4 +1,6 @@
-export const useTabComponent = (currentTabIndex: Ref<number>) =>
+import { Tab } from '~/store/main';
+
+export const useTabComponent = (currentTab: Ref<Tab>) =>
   computed(() => {
     const DriverManagementComponent = defineAsyncComponent(
       () => import('../components/DriverManagement.vue')
@@ -7,6 +9,7 @@ export const useTabComponent = (currentTabIndex: Ref<number>) =>
       () => import('../components/TourManagement.vue')
     );
 
-    if (currentTabIndex.value === 0) return DriverManagementComponent;
+    if (currentTab.value === Tab.DriverManagement)
+      return DriverManagementComponent;
     return TourManagementComponent;
   });

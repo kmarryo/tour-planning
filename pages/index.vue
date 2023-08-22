@@ -1,6 +1,6 @@
 <template>
   <div class="container mx-auto my-10">
-    <TabSelection v-model="currentTabIndex" :tabs="tabs" class="mx-3" />
+    <TabSelection v-model="currentTab" :tabs="tabs" class="mx-3 md:mx-0" />
     <transition name="fade">
       <component :is="TabComponent" class="my-10" @toggle-modal="toggleModal" />
     </transition>
@@ -29,10 +29,12 @@ import { storeToRefs } from 'pinia';
 import { useMainStore } from '~/store/main';
 import { useToggle } from '@vueuse/core';
 import { breakpointsTailwind, useBreakpoints } from '@vueuse/core';
+import { Tab } from '~/store/main';
 
 const store = useMainStore();
-const { clearDriver, clearTour, fetchDrivers, fetchTours } = store;
-const { modalContent, hasToastNotification, notificationText } =
+const { clearDriver, clearTour, fetchDrivers, fetchTours, clearSearchTerm } =
+  store;
+const { modalContent, hasToastNotification, notificationText, currentTab } =
   storeToRefs(store);
 
 const tabs = computed(() =>
@@ -40,10 +42,9 @@ const tabs = computed(() =>
     ? ['Drivers', 'Tours']
     : ['Driver Management', 'Tour Management']
 );
-const currentTabIndex = ref(0);
-const isDriver = computed(() => currentTabIndex.value === 0);
-const isTour = computed(() => currentTabIndex.value === 1);
-const TabComponent = useTabComponent(currentTabIndex);
+const isDriver = computed(() => currentTab.value === Tab.DriverManagement);
+const isTour = computed(() => currentTab.value === Tab.TourManagement);
+const TabComponent = useTabComponent(currentTab);
 
 const [isModalOpen, toggleModal] = useToggle(false);
 const ModalComponent = useModalComponent(modalContent);
@@ -61,4 +62,8 @@ const refetch = () => {
 
 const breakpoints = useBreakpoints(breakpointsTailwind);
 const smallerThanMd = breakpoints.smaller('md');
+
+watch(currentTab, () => {
+  clearSearchTerm();
+});
 </script>
