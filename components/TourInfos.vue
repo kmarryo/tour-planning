@@ -10,13 +10,23 @@
         placeholder="Gartenbau Wiesmann GmbH"
         class="mb-5"
       />
-      <CustomInput
-        v-model="tour.shipmentDate"
-        label="Shipment Date"
-        name="shipment-date"
-        placeholder="05.08.2023"
-        class="mb-5"
-      />
+      <div>
+        <p class="mb-2">Shipment Date</p>
+        <DatePicker
+          v-model.string="tour.shipmentDate"
+          :masks="masks"
+          :min-date="new Date()"
+        >
+          <template #default="{ togglePopover }">
+            <div
+              class="border-2 border-gray-300 px-4 py-2 rounded-lg my-5 cursor-pointer"
+              @click="togglePopover"
+            >
+              {{ tour.shipmentDate || 'Please select date for shipment' }}
+            </div>
+          </template>
+        </DatePicker>
+      </div>
       <CustomInput
         v-model="tour.locationFrom"
         label="Location From"
@@ -58,6 +68,8 @@
 import { ModalContent } from '~/composables/modal';
 import { storeToRefs } from 'pinia';
 import { useMainStore } from '~/store/main';
+import { DatePicker } from 'v-calendar';
+import 'v-calendar/style.css';
 
 const props = defineProps({
   content: {
@@ -113,5 +125,9 @@ const driverNames = computed(() => {
           selectable: false,
         },
       ];
+});
+
+const masks = ref({
+  modelValue: 'DD.MM.YYYY',
 });
 </script>

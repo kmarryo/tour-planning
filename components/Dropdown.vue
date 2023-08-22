@@ -2,7 +2,7 @@
   <Menu as="div" class="relative inline-block text-left">
     <div>
       <MenuButton
-        class="flex w-full justify-center gap-x-1.5 rounded-md bg-white pl-5 pr-3 py-2 font-semiboldshadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+        class="flex w-full justify-center gap-x-1.5 rounded-md bg-white pl-5 pr-3 py-2 font-semiboldshadow-sm ring-2 ring-inset ring-gray-300 hover:bg-gray-50"
       >
         {{ buttonText }}
         <svg
@@ -31,7 +31,7 @@
       leave-to-class="transform opacity-0 scale-95"
     >
       <MenuItems
-        class="absolute left-0 z-10 mt-2 w-80 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+        class="absolute left-0 z-10 mt-2 w-80 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-2 ring-black ring-opacity-5 focus:outline-none"
       >
         <div class="py-1">
           <MenuItem
