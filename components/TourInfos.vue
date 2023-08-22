@@ -16,6 +16,7 @@
           v-model.string="tour.shipmentDate"
           :masks="masks"
           :min-date="new Date()"
+          color="indigo"
         >
           <template #default="{ togglePopover }">
             <div
