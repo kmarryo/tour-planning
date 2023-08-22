@@ -1,27 +1,33 @@
 <template>
-  <div class="container mx-auto my-10">
-    <TabSelection v-model="currentTab" :tabs="tabs" class="mx-3 md:mx-0" />
-    <transition name="fade">
-      <component :is="TabComponent" class="my-10" @toggle-modal="toggleModal" />
-    </transition>
-
-    <Modal v-if="isModalOpen" @close="handleAbort()">
-      <template #content>
+  <section class="container mx-auto my-10">
+    <div class="px-3 md:px-0">
+      <TabSelection v-model="currentTab" :tabs="tabs" />
+      <transition name="fade">
         <component
-          :is="ModalComponent"
-          :content="modalContent"
-          :is-driver="isDriver"
-          :is-tour="isTour"
-          @close="toggleModal()"
-          @update="refetch"
+          :is="TabComponent"
+          class="my-10"
+          @toggle-modal="toggleModal"
         />
-      </template>
-    </Modal>
-    <ToastNotification
-      :show-notification="hasToastNotification"
-      :text="notificationText"
-    />
-  </div>
+      </transition>
+
+      <Modal v-if="isModalOpen" @close="handleAbort()">
+        <template #content>
+          <component
+            :is="ModalComponent"
+            :content="modalContent"
+            :is-driver="isDriver"
+            :is-tour="isTour"
+            @close="toggleModal()"
+            @update="refetch"
+          />
+        </template>
+      </Modal>
+      <ToastNotification
+        :show-notification="hasToastNotification"
+        :text="notificationText"
+      />
+    </div>
+  </section>
 </template>
 
 <script lang="ts" setup>

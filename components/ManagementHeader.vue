@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="md:flex justify-between items-center my-2 mx-3 md:mx-0">
+    <div class="md:flex justify-between items-center my-2">
       <h2 class="text-2xl my-5 font-bold">{{ heading }}</h2>
       <CtaButton :text="ctaText" @click="$emit('ctaClicked')">
         <template #append-icon>

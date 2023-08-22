@@ -5,7 +5,7 @@
       cta-text="Add new driver"
       @cta-clicked="openAddDriver()"
     />
-    <SearchBar class="my-10 mx-3 md:mx-0" />
+    <SearchBar class="my-10" />
     <DataList v-if="filteredDrivers?.length" :attributes="driverAttributes">
       <template #data-sets>
         <Driver

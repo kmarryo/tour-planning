@@ -5,7 +5,7 @@
       cta-text="Create new tour"
       @cta-clicked="openCreateNewTour()"
     />
-    <SearchBar class="my-10 mx-3 md:mx-0" />
+    <SearchBar class="my-10" />
     <DataList v-if="filteredTours?.length" :attributes="tourAttributes" is-tour>
       <template #data-sets>
         <Tour

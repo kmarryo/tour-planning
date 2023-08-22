@@ -1,6 +1,6 @@
 <template>
   <div
-    class="grid grid-flow-col grid-cols-3 p-3 mx-3 md:mx-0 border border-gray-300 rounded-lg shadow-sm items-center gap-5"
+    class="grid grid-flow-col grid-cols-3 p-3 border border-gray-300 rounded-lg shadow-sm items-center gap-5"
   >
     <div>
       {{ driver.name }}
