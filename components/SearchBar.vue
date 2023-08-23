@@ -25,12 +25,19 @@
       </div>
       <input
         v-model="searchTerm"
+        ref="searchInput"
         type="search"
         id="search"
         class="block w-full p-4 pl-10 text-sm border border-gray-300 rounded-lg bg-gray-50 focus:border-indigo-600 outline-none"
         :placeholder="placeholder"
         required
       />
+      <div
+        v-if="!focused"
+        class="absolute right-5 top-1/2 -translate-y-1/2 border border-gray-200 h-5 pointer-events-none p-3 rounded-full text-sm leading-[0px]"
+      >
+        {{ getSearchIndicator() }}
+      </div>
     </div>
   </div>
 </template>
@@ -38,6 +45,7 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia';
 import { useMainStore } from '~/store/main';
+import { useFocus } from '@vueuse/core';
 
 defineProps({
   placeholder: {
@@ -48,4 +56,27 @@ defineProps({
 
 const store = useMainStore();
 const { searchTerm } = storeToRefs(store);
+
+const searchInput = ref<HTMLElement | null>(null);
+const { focused } = useFocus(searchInput);
+
+const handleKeydown = (event: KeyboardEvent) => {
+  if ((event.metaKey || event.ctrlKey) && event.key === 'k')
+    searchInput.value?.focus();
+};
+onMounted(() => {
+  window.addEventListener('keydown', handleKeydown);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('keydown', handleKeydown);
+});
+
+const getSearchIndicator = () => {
+  if (!process.client) return;
+  if (navigator.userAgent.indexOf('Mac OS X') !== -1) {
+    return '⌘ + K';
+  }
+  return 'Strg + K';
+};
 </script>
