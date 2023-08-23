@@ -33,7 +33,7 @@
         required
       />
       <div
-        v-if="!focused"
+        v-if="!focused && !isMobileDevice"
         class="absolute right-5 top-1/2 -translate-y-1/2 border border-gray-200 h-5 pointer-events-none p-3 rounded-full text-sm leading-[0px]"
       >
         {{ getSearchIndicator() }}
@@ -64,8 +64,10 @@ const handleKeydown = (event: KeyboardEvent) => {
   if ((event.metaKey || event.ctrlKey) && event.key === 'k')
     searchInput.value?.focus();
 };
+const isMobileDevice = ref(false);
 onMounted(() => {
   window.addEventListener('keydown', handleKeydown);
+  isMobileDevice.value = /Mobile/.test(navigator.userAgent);
 });
 
 onUnmounted(() => {
